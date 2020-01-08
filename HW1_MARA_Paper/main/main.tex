@@ -1,0 +1,44 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{subfiles}
+
+\input{../macro/packages.tex}
+\input{../macro/settings.tex}
+\input{../macro/new_commands.tex}
+
+
+\begin{document}
+
+\author{Rocco Ardino\\1231629  \and Alessandro Lambertini\\1121181 \and Alice Pagano \\1236916 \and Michele Puppin \\ 1227474}
+\title{\textbf{Management and analysis of physics dataset: \\ FPGA Counter}}
+\maketitle
+
+\section{}
+
+\begin{figure}[h!]
+\begin{lstlisting}[style=vhdl]
+  -- (this is a VHDL comment)
+
+  -- import std_logic from the IEEE library
+  library IEEE;
+  use IEEE.std_logic_1164.all;
+
+  -- this is the entity
+  entity ANDGATE is
+     port (
+       I1 : in std_logic;
+       I2 : in std_logic;
+       O  : out std_logic);
+  end entity ANDGATE;
+
+  -- this is the architecture
+  architecture RTL of ANDGATE is
+  begin
+     O <= I1 and I2;
+  end architecture RTL;
+\end{lstlisting}
+\caption{\label{}}
+\end{figure}
+
+
+
+\end{document}
