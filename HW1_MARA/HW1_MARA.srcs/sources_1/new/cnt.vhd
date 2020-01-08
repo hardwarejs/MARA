@@ -1,21 +1,21 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+-- Company:
+-- Engineer:
+--
 -- Create Date: 11/25/2019 05:38:00 PM
--- Design Name: 
+-- Design Name:
 -- Module Name: blink - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
+-- Project Name:
+-- Target Devices:
+-- Tool Versions:
+-- Description:
+--
+-- Dependencies:
+--
 -- Revision:
 -- Revision 0.01 - File Created
 -- Additional Comments:
--- 
+--
 ----------------------------------------------------------------------------------
 
 
@@ -37,7 +37,7 @@ entity cnt is
             rst : in std_logic;
             frz : in std_logic;
             start : in std_logic;
-            sel_in : in std_logic_vector(3 downto 0);            
+            sel_in : in std_logic_vector(3 downto 0);
             y_out : out std_logic_vector(3 downto 0));
 end cnt;
 
@@ -53,15 +53,15 @@ sel <= sel_in(3 downto 1);
 
 p_cnt : process(clk,rst,sel_in) is
     begin
-    
-    if rst = '1' then 
+
+    if rst = '1' then
         counter <= (others => '0');
-    end if; 
+    end if;
 
     if rising_edge(clk) then
         counter <= counter +1;
     end if;
-    
+
 end process;
 
 btn_state : process(clk,rst,frz,start,slow_clk,sel_in,state) is
@@ -76,16 +76,16 @@ btn_state : process(clk,rst,frz,start,slow_clk,sel_in,state) is
         end if;
     end if;
 end process;
- 
+
 p_slw_cnt : process(clk,rst,frz,slow_clk,sel_in,state) is
    begin
    if rst = '1' then
-        slow_counter <= (others => '0');  
+        slow_counter <= (others => '0');
    end if;
-        
+
     if rising_edge(clk) then
         slow_clk_p <= slow_clk;
-        
+
         if state = '0' then
             if slow_clk = '1' and slow_clk_p = '0' then
                 if sel_in(0) = '0' then
@@ -96,27 +96,27 @@ p_slw_cnt : process(clk,rst,frz,slow_clk,sel_in,state) is
             end if;
         end if;
     end if;
-     
+
 end process;
 
 
 speed : process(clk,rst,slow_clk,sel) is
     begin
-   
-    case sel is 
+
+    case sel is
         when "000" => slow_clk <= counter(27);
         when "001" => slow_clk <= counter(26);
         when "010" => slow_clk <= counter(25);
         when "011" => slow_clk <= counter(24);
         when "100" => slow_clk <= counter(23);
-        when "101" => slow_clk <= counter(22);  
+        when "101" => slow_clk <= counter(22);
         when "110" => slow_clk <= counter(21);
-        when "111" => slow_clk <= counter(10);
+        when "111" => slow_clk <= counter(8); #8 per la simulazione, 20 normalmente
         when others => null;
-    end case;      
-       
+    end case;
+
 end process;
- 
+
 y_out <= std_logic_vector(slow_counter);
 
 end rtl;
