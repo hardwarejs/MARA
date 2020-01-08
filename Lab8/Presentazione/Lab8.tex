@@ -1,0 +1,272 @@
+\documentclass{beamer}
+
+\usepackage{setspace}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{tabularx,ragged2e,booktabs}
+\usetheme{INFN}
+
+
+
+
+
+\title{Management and analysis of 
+	physics datasets, Part. 1}
+\subtitle{Eighth Laboratory}
+\author{\href{mailto:stefano.pavinato@lnl.infn.it?subject=[VHDL course] ... }{Stefano Pavinato}}
+\date{9/1/2019}
+
+\begin{document}
+
+	\maketitle
+
+	\begin{frame}{Outline}
+		\tableofcontents
+	\end{frame}
+	
+	\AtBeginSection[]
+	   {
+	   \begin{frame}<beamer>{Outline}
+	   \tableofcontents[currentsection,currentsubsection, 
+	       hideothersubsections, 
+	       sectionstyle=show/shaded,
+	       subsectionstyle=show/shaded
+	   ]
+	   \end{frame}
+	   }
+
+   \AtBeginSubsection[]
+   {
+   \begin{frame}<beamer>{Outline}
+   \tableofcontents[currentsection,currentsubsection, 
+       hideothersubsections, 
+       sectionstyle=show/shaded,
+       subsectionstyle=show/shaded
+   ]
+   \end{frame}
+   }
+	
+   \section{Laboratory Introduction} 
+  
+   \begin{frame}{Goals}
+      
+   \begin{itemize}
+   	\item Become familiar with SPI protocol.
+   	\item Serial Flash Memory as SPI slave.
+   \end{itemize} 
+
+   \end{frame}
+  
+%	\begin{frame}{VHDL naming convention}
+%    \begin{table}
+%	\begin{tabular}{|l | l |  }
+%		Signals/components & Name \\
+%		\hline \hline
+%		Clock &  $clk$ \\  
+%		Reset &  $rst$ \\ 
+%		Input Port & $port\_in$ \\
+%		Output Port & $port\_out$ \\
+%		VHDL file name & $entityname.vhd$ \\
+%		Test bench file name & $tb\_entityname.vhd$ \\
+%		Signal between 2 comps & $sign\_cmp1\_cmp2$ \\
+%		Process name & $p\_name$ \\
+%		state name & $s\_name$ \\
+%		 ... & ... \\
+%	\end{tabular}
+%\end{table}
+%	\end{frame}	
+		    
+
+      
+    \section{SPI}
+    
+    \begin{frame}{SPI - Wiki}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/spi_1}
+    	\end{figure}   
+    %\end{frame}
+ 
+     %\begin{frame}{SPI - Wiki (2)}
+     	\begin{figure}[!tbh]
+     		\centering
+     		\includegraphics*[width=1\textwidth]{images/spi_2}
+     	\end{figure}   
+     \end{frame}
+     
+    \begin{frame}{SPI (1)}
+    	\begin{itemize}
+    		\item SPI (Serial Peripheral Interface) : 
+    		\begin{itemize}
+    			\item it is serial: the data is transmitted one bit at a time;
+    			\item it is synchronous: the transmission of the data is imposed by the clock;
+    			\item it has an architecture master/slave(s);
+    		%	\item it is used for the communications between devices.
+    		\end{itemize}
+    		\item It is a basic serial protocol (not the most).
+    		\item It is mostly used for the communication between $\mathrm{\mu}$C or FPGA and ICs like: A/D, D/A converters, sensors, memories ...
+    	\end{itemize}
+    \end{frame}  
+     
+    \begin{frame}{SPI (2)}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/spi_schema}
+    	\end{figure} 
+    \begin{itemize}
+    	\item The data are exchanged between a master and a slave.
+    	\item Essentially each device has inside it a shift register with the data. The data transmission "exchanges" the data between the shift registers.
+    	\item The  Master addresses the Slave and it manages the data transmission with the clock (on the \textbf{rising edge}).
+    \end{itemize}  
+    \end{frame}
+
+    \begin{frame}{SPI (3)}
+    	SPI signals (from the slave side):
+    	\begin{itemize}
+    		\item \textbf{CS} or \textbf{SS}: Chip (Slave) Select. When this input signal is low, the device is selected.
+    		\item \textbf{CLK}: Clock. This input signal provides the timing for the serial interface. Instructions, addresses, or data present at the MOSI  are latched (evaluated) on the rising edge of the clock.
+    		\item\textbf{MOSI}: Master Output Slave Input. This input signal is used to transfer data serially into the device. It receives instructions,
+    		addresses, and the data to be programmed.
+    		\item  \textbf{MISO}: Master Input Slave Output. This output signal is used to transfer data serially out of the device. %Data are shifted out on
+    		%the falling edge of the clock.
+    	\end{itemize}  
+    \end{frame}
+
+
+    \begin{frame}{SPI (4)}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=0.8\textwidth]{images/board}
+    	\end{figure}   
+    \end{frame}
+
+   \section{Serial Flash Memory}
+
+    \begin{frame}{Flash Memory}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/flash}
+    	\end{figure}       	
+    \end{frame}
+
+    \begin{frame}{Flash Memory - Organization}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/org}
+    	\end{figure}    
+    	\begin{itemize}
+    		\item $16777216 = 2^{24}$;
+    		\item Therefore the address of each 8-bit register is a 24-bit address.
+    	\end{itemize}  	
+    \end{frame}
+    
+
+    \begin{frame}{Flash Memory - Read (1) }
+  To read the memory content in SPI protocol different instructions are available:
+  READ, Fast Read, Dual Output Fast Read, Dual Input Output Fast Read, Quad Output Fast  Read and Quad Input Output Fast read, allowing the application to choose an instruction to  send addresses and receive data by one, two or four data lines.  	
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/table}
+    	\end{figure}       	
+    \end{frame}
+    
+    \begin{frame}{Flash Memory - Read (2)}
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/read}
+    	\end{figure}       	
+    \end{frame}
+ 
+    \begin{frame} {Flash Memory - Read (3)}
+    	\begin{itemize}
+    		\item The device is selected by driving the CS low.
+    		\item The instruction code for the READ instruction ($00000011_2$) is sent. Each bit is latched-in (evaluated) on the rising edge of the clock.
+	    	\item The 3 bytes address (23,22,...,1,0) are then sent. Each bit is latched-in (evaluated) on the rising edge of the clock.
+	    	\item Then the memory content, at that address, is shifted out on the MISO, each bit is sent, on the falling edge of Serial Clock (C). {\large But} evaluated by the Master on the following rising-edge.
+	    	\item The READ instruction is terminated by driving the CS high.    	\end{itemize}
+    \end{frame}
+    
+   \section{Homework}
+  
+     
+   \begin{frame}{Homework}
+   	
+   	\begin{itemize}
+   		\item \textbf{You have to write the VHDL code to implement an SPI master, in order to read the data stored in a 8-bit register of the serial flash memory.}
+   	\end{itemize}	
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=0.5\textwidth]{images/master}
+    	\end{figure}       	
+   \end{frame}             
+
+
+   \begin{frame}{Hmw - Master signals (1)}
+   	 
+   	%The master has to be implemented as a FSM. \\ Master signals:
+   	\begin{itemize}
+   		\item clock: the clock provided by the oscillator mounted on the evaluation board;
+   		\item miso;
+   		\item reset: provided by the VIO. It is used to reset the FSM;
+   		\item start: provided by the VIO. It is used to start the READ operation, on the rising edge of the signal;
+   		\item txd: a 32 bit signals. It is formed by the the instruction byte and the address 3 bytes. The address (or rather the last 4 significant bits) is provided by the VIO;
+   	\end{itemize}     	
+   \end{frame}      
+ 
+ 
+   \begin{frame}{Hmw - Master signals (2)}
+   	   	
+   	\begin{itemize}
+   		\item cs: when you have received the 8 bits stored in a register, after the read operation, the CS has to switch from '0' to '1';
+   		\item mosi;
+   		\item ready: the ready is a pulse '0' $\rightarrow$ '1' $\rightarrow$ '0' that happens when you have received the 8 bits stored in a register, after the read operation;
+        \item rxd: a 8 bit signals. It is formed by the 8 bits obtained by the read operation;   		
+   		\item sclk: is the clock generated by the master, that synchronizes the data transmission.
+   	\end{itemize}     	
+   \end{frame}    
+   
+   \begin{frame}{Memory Configuration}
+   	\begin{itemize}
+   		\item The flash memory must be configured using the .mcs file in the folder $flash\_configuration$. With this .mcs file you are going to write the first six flash memory locations with these values:
+   		\begin{enumerate}
+   			\item @ address 0x000000 $\Rightarrow$ 0x00;
+   			\item @ address 0x000001 $\Rightarrow$ 0x01;
+   			\item @ address 0x000002 $\Rightarrow$ 0x02;
+   			\item @ address 0x000003 $\Rightarrow$ 0x03;
+   			\item @ address 0x000004 $\Rightarrow$ 0x04;
+   			\item @ address 0x000005 $\Rightarrow$ 0x05.
+   		\end{enumerate}
+   		\item \textbf{0x} stands for hexadecimal value.
+   		\item The configuration of the flash memory using in the .mcs file is described in the section 3 of the third laboratory.   		
+   	\end{itemize}
+   \end{frame}
+ 
+   \begin{frame}{Hints (1)}
+   	\begin{itemize}
+   		\item You can download  all the folder $Lab8$, open the project (the file .xpr) and work there.
+   		\item You have to write the code \textbf{only} inside the file	$spi\_master.vhd$.
+   		\item The SPI master can be implemented as a 3 state FSM.
+   		\item \textbf{Remember} the testbenches !!!
+   	\end{itemize}
+   \end{frame} 
+   
+   \begin{frame}{Hints (2)}
+   You can use this code as an inspirational source for you code. It is a \textbf{partial} implementation of a state of the FSM. In particular in this state the txd word is transmitted to the slave.
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/code}
+    	\end{figure}        
+   \end{frame}    
+ 
+   \begin{frame}{Hints (3)}
+   	It might be very useful exploit the ILA core(s) in order to monitor the state of the FSM, the internal signals and the signals representing the SPI master inputs and output.
+   	\vspace{1cm}
+   	 \\\textbf{For the final check instantiates an ILA core, where you monitor the CS, the MOSI, the MISO and the SCLK. You must get a temporal diagram very similar to the diagram of the picture/ slide 15.} Monitor also the "ready" signal.
+    	\begin{figure}[!tbh]
+    		\centering
+    		\includegraphics*[width=1\textwidth]{images/ila}
+    	\end{figure}        
+    \end{frame}      
+                
+\end{document}
+

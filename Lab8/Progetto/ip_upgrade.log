@@ -1,0 +1,16 @@
+Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2018.3 (lin64) Build 2405991 Thu Dec  6 23:36:41 MST 2018
+| Date         : Mon Jan  6 21:02:19 2020
+| Host         : towner running 64-bit Ubuntu 16.04.6 LTS
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'vio_0'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of vio_0 (xilinx.com:ip:vio:3.0 (Rev. 19)) to Vivado generation flows.
+

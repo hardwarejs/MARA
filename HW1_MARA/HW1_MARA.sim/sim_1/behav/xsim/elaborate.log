@@ -1,0 +1,17 @@
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: /opt/Xilinx/Vivado/2018.3/bin/unwrapped/lnx64.o/xelab -wto 68fb8513837a4809a550b955455c26e3 --incr --debug typical --relax --mt 8 -L xil_defaultlib -L secureip --snapshot tb_cnt_behav xil_defaultlib.tb_cnt -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling architecture rtl of entity xil_defaultlib.cnt [cnt_default]
+Compiling architecture behavioral of entity xil_defaultlib.tb_cnt
+ERROR: [XSIM 43-3409] Failed to compile generated C file xsim.dir/tb_cnt_behav/obj/xsim_1.c.
+ERROR: [XSIM 43-3915] Encountered a fatal error. Cannot continue. Exiting... 
