@@ -85,21 +85,13 @@ end process;
 
 p_start: process
 begin
-    btn_start <= '1'; wait for 55 ns;
-    btn_start <= '0'; wait for 10500000 ns;
+    btn_rst <= '1'; wait for 50 ns;
+    btn_rst <= '0'; wait for 50 ns;
+    btn_start <= '1'; wait for 50 ns;
+    btn_start <= '0'; wait for 1200 ns;
+    btn_frz <= '1'; wait for 50 ns;
+    btn_frz <= '0'; wait for 50 ns;
+    
 end process;
-
-p_stop: process
-begin
-    btn_frz <= '0'; wait for 10000000 ns;
-    btn_frz <= '1'; wait for 55 ns;
-end process;
-
-p_rst: process
-begin
-    btn_rst <= '1' ; wait for 15 ns; btn_rst <= '0'; wait;
-
-end process;
-
 
 end Behavioral;

@@ -27,7 +27,17 @@ INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA/HW1_MA
 INFO: [VRFC 10-3107] analyzing entity 'tb_cnt'
 INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA/HW1_MARA.srcs/sim_1/new/tb_cnt.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'tb_cnt'
-INFO: [VRFC 10-163] Analyzing VHDL file "/home/michelepuppin/Desktop/MARA/backup/HW1_MARA/HW1_MARA.srcs/sources_1/new/cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA/HW1_MARA.srcs/sim_1/new/tb_cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'tb_cnt'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA/HW1_MARA.srcs/sources_1/new/cnt.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'cnt'
-INFO: [VRFC 10-163] Analyzing VHDL file "/home/michelepuppin/Desktop/MARA/backup/HW1_MARA/HW1_MARA.srcs/sim_1/new/tb_cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA/HW1_MARA.srcs/sources_1/new/cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'cnt'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA_def/HW1_MARA.srcs/sources_1/new/cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'cnt'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA_def/HW1_MARA.srcs/sim_1/new/tb_cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'tb_cnt'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA_def/HW1_MARA.srcs/sources_1/new/cnt.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'cnt'
+INFO: [VRFC 10-163] Analyzing VHDL file "/home/student08/Desktop/HW1_MARA_def/HW1_MARA.srcs/sim_1/new/tb_cnt.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'tb_cnt'
