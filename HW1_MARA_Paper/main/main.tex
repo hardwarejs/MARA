@@ -8,7 +8,7 @@
 
 \begin{document}
 
-\author{Rocco Ardino\\1231629  \and Alessandro Lambertini\\1121181 \and Alice Pagano \\1236916 \and Michele Puppin \\ 1227474}
+\author{Rocco Ardino\\1231629  \and Alessandro Lambertini\\ 1242885 \and Alice Pagano \\1236916 \and Michele Puppin \\ 1227474}
 \title{\textbf{Management and analysis of physics dataset: \\ FPGA  Stopwatch (modulo 16)}}
 \maketitle
 
@@ -22,21 +22,28 @@ The purpose of the assignment is to implement a 4-bit stopwatch, namely a counte
 \item \textbf{REVERSE SELECTOR}: it makes the stopwatch counting in reverse.
 \end{itemize}
 
-\section{Implementation}
-The Arty7 board has 4 LEDs that could be used as a display counter \( (0 \rightarrow 15) \). Indeed, each LED is associated to a bit: an off LED corresponds to the bit state '0', while a blinking one corresponds to the bit state '1'. The time flow is regulated by the embedded clock of the board, which is used to implement the \textbf{counter}.
-Concerning the functionalities, \textbf{START}, \textbf{STOP} and \textbf{RESET} can be triggered by the embedded buttons of the board, while \textbf{FREQUENCY} and \textbf{REVERSE SELECTOR}s by the four switches. In particular, three switches are used for modulating the frequency of the counting and one is used for reversing it. The actual disposition of functions is illustrated in Figure \ref{fig:board_implementation}.
 
-\begin{figure}[h!]
+
+
+
+\section{Implementation}
+The Arty7 board has 4 LEDs that could be used as a display counter \( (0 \rightarrow 15) \). Indeed, each LED is associated to a bit: an off LED corresponds to the bit state '0', while a blinking one corresponds to the bit state '1'. The time flow is regulated by the embedded clock of the board, which is used to implement the counter.
+Concerning the functionalities, START, STOP and RESET can be triggered by the embedded buttons of the board, while FREQUENCY and REVERSE SELECTORs by the four switches. In particular, three switches are used for modulating the frequency of the counting and one is used for reversing it. The actual disposition of functions is illustrated in Figure \ref{fig:board_implementation}.
+
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{../main/image/ciao.jpg}
-\caption{\label{fig:board_implementation} Description.}
+\includegraphics[width=0.7\textwidth]{../main/image/board_implementation.pdf}
+\caption{\label{fig:board_implementation} Arty7 board: disposition of the functionalities.}
 \end{figure}
 
-\subsection{Counter}
-The code implementation is constituted by four main processes. The first two processes (\texttt{p\_cnt} and \texttt{p\_slw\_cnt}) are used to implement the counter.
 
-\begin{figure}[h!]
-    \begin{lstlisting}[style=vhdl]
+\clearpage
+\subsection{Counter}
+The code implementation is constituted by four main processes. The first two processes ({\footnotesize\texttt{p\_cnt}} and {\footnotesize\texttt{p\_slw\_cnt}}) are used to implement the counter.
+
+First of all the clock has been used to increase the value of a vector of 28 elements ({\footnotesize\texttt{counter}}) each time the clock signal shows a rising edge, as in process {\footnotesize\texttt{p\_cnt}} (Listing \ref{lst:p_cnt}).
+
+\begin{lstlisting}[style=vhdl,label={lst:p_cnt},caption={\texttt{p\_cnt} process.}]
 p_cnt : process(clk,rst,sel_in) is
     begin
     if rst = '1' then
@@ -46,13 +53,11 @@ p_cnt : process(clk,rst,sel_in) is
         counter <= counter +1;
     end if;
 end process;\end{lstlisting}
-    \caption{\label{}}
-\end{figure}
 
-Since the speed of the embedded clock is too fast, first it has been used to increase the value of a vector of 28 elements (\texttt{counter}) each time the clock signal shows a rising edge, as in process \texttt{p\_cnt}.
+Then, since the speed of the embedded clock is too fast, it has been slowed down in process {\footnotesize\texttt{p\_swl\_cnt}} (Listing \ref{lst:p_slw_cnt}) by creating a slow clock signal {\footnotesize\texttt{slow\_clk}} and taking the \(i^\text{th}\) bit {\footnotesize\texttt{slow\_clk <= counter(i)}}, where the value of \(i\) is determined by the frequency selector.
+The slow clock signal is eventually been used to update the {\footnotesize\texttt{slow\_counter}} signal which reflects the four bit display counter that will be mapped to the LEDs.
 
-\begin{figure}[h!]
-    \begin{lstlisting}[style=vhdl]
+\begin{lstlisting}[style=vhdl,label={lst:p_slw_cnt},caption={\texttt{p\_slw\_cnt} process.}]
 p_slw_cnt : process(clk,rst,frz,slow_clk,sel_in,state) is
     begin
     if rst = '1' then
@@ -71,20 +76,12 @@ p_slw_cnt : process(clk,rst,frz,slow_clk,sel_in,state) is
         end if;
     end if;
 end process;\end{lstlisting}
-    \caption{\label{}}
-\end{figure}
-
-Then it has been slowed down in process \texttt{p\_swl\_cnt} by taking the most significant bit 
-
-\subsection{START, STOP and RESET}
-
-
-
-
 
 \subsection{FREQUENCY and REVERSE SELECTOR}
-\begin{figure}[h!]
-    \begin{lstlisting}[style=vhdl]
+In order to select manually the speed of the display counter, the value \(i^\text{th}\) element of the vector {\footnotesize\texttt{counter}} is chosen based on the values of the three elements of {\footnotesize\texttt{sel}} vector that reflect the position of three switches. It is implemented in the {\footnotesize\texttt{speed}} process (Listing \ref{lst:speed}).
+Morover, in order to reverse the counter, {\footnotesize\texttt{slow\_counter}} is updated forward \( (+1)\) or backward \((-1)\) based on the position of a fourth switch as shown in process {\footnotesize\texttt{p\_slw\_cnt}} (Listing \ref{lst:p_slw_cnt}).
+
+\begin{lstlisting}[style=vhdl,label={lst:speed},caption={\texttt{speed} process.}]
 speed : process(clk,rst,slow_clk,sel) is
     begin
     case sel is
@@ -99,11 +96,32 @@ speed : process(clk,rst,slow_clk,sel) is
         when others => null;
     end case;
 end process;\end{lstlisting}
-    \caption{\label{}}
-\end{figure}
+
+\subsection{START, STOP and RESET}
+START and STOP button has been implemented in the process {\footnotesize\texttt{btn\_state}} (Listing \ref{lst:btn_state}), where a variable {\footnotesize\texttt{state}} is set to 1 if STOP button is pressed while it is st to '0' if START is pressed.
+In process {\footnotesize\texttt{p\_slw\_cnt}}, previously described in Listing \ref{lst:p_slw_cnt}, the update of {\footnotesize\texttt{slow\_counter}} happens only if {\footnotesize\texttt{state}} is set to '0'. Instead, RESET button, besides setting {\footnotesize\texttt{state}} to '1' in order to stop the counter, sets {\footnotesize\texttt{counter}} and {\footnotesize\texttt{slow\_counter}} to '0'.
+
+\begin{lstlisting}[style=vhdl,label={lst:btn_state},caption={\texttt{btn\_state} process.}]
+btn_state : process(clk,rst,frz,start,slow_clk,sel_in,state) is
+    begin
+    if rising_edge(clk) then
+        if start = '1' then
+            state <= '0';
+        elsif frz = '1' then
+            state <= '1';
+        elsif rst = '1' then
+            state <= '1';
+        end if;
+    end if;
+end process;\end{lstlisting}
 
 \section{Simulation}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{../main/image/sim.png}
+\caption{\label{fig:board_implementation} Simulation.}
+\end{figure}
 
 
 
