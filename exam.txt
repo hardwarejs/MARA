@@ -1,0 +1,20 @@
+NUC pc has the necessary tools for the final exercise.
+Check the code example
+Pick up an old project and redesign it from scratch (?)
+Design a FIR filter also in another language and compare the results. For example, use python.
+Virtual IO already configured in the example, you have to design the dual port ram.
+What we have to write from scratch are the connections between already made blocks.
+
+
+
+Progetto FIRMWARE:
+    Lanciare write bitstream
+    Sul nuc, andare sulle impostazioni e attivare wired connection. Vedere l'indirizzo della schedina e pingarla (ex: ping 10.10.10.100). In questo modo stiamo parlando alla scheda.
+    Copiare poi il codice python nel pdf (dopo aver avviato lo script fornito dai docenti del lab) e vedere se funziona. Praticamente stiamo scrivendo e leggendo sulla ram del pc (?)
+    Andare poi su vivado sul virtual IO e scrivere indicando dato e indirizzo. Aggiungere indirizzo su d[31:0], mettere a 1 il write enable dopo aver messo il dato. A quel punto possiamo leggere attraverso lo script di python. Usare hw.dispatch() e poi data.value(). Dopo questo implementare il filtro (tipo quello di prima o cambiarlo) e fare una macchina a stati che in continuazione legge da un certo indirizzo, applica il filtro e lo scrive a un altro indirizzo. Quando finisce la memoria, ricomincia da capo. Il segnale lo scriviamo noi da software.
+    Programma per disegnare forme d'onda: wavedrom.
+    Al posto di data_to_write dovremmo mettere un file con numeri da leggere, he possono essere le ammpiezze di una forma d'onda.
+    Conviene fare la macchina a stati in un altro file e istanziarla poi come si fa di solito (con un processo). Poi dentro il file principale si fa la cosa con la port map e il nome della cosa stessa va messo dentro le ports della entity top level.
+
+Progetto TRIMODE...:
+    Non toccare, è una cartella di "servizio" (è come un progetto a parte, la genera vivado in automatico)
