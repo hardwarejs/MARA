@@ -11,7 +11,7 @@ x = np.arange(nsamples)
 signal1 = np.sin(2 * np.pi * frequency * x / fs)
 
 for i in signal1:
-    p = np.int(i * np.power(2,10) + np.power(2,10) )
+    p = np.int(i * np.power(2,8) + np.power(2,8) )
     file1.write(str(p))
     file1.write("\n")
 
