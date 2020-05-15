@@ -1,0 +1,30 @@
+DOCUMENTAZIONE
+
+Istruzioni per setup:
++ Aprire con Vivado il progetto finale
++ Lanciare il Write Bitstream
++ Selezionare Open Hardware Manager -> Autoconnect -> Program device
++ Aprire il terminale e digitare:
+	++ $ sudo ifconfig eno1 10.10.10.1
+	++ $ ping 10.10.10.100
++ Controllare che sia tutto apposto e che non ci siano errori
++ Entrare nella cartella ipbus-sofware: cd ~/ipbus-software/
++ $ source ./uhal/tests/setup.sh
++ Entrare in: cd /home/student08/Desktop/final_project/final_project_IPBUS/Progetto/software
+	(~/Desktop/progetto_finale/exercise_2/final_project_IPBUS/Progetto/software)
++ $ python -i ipbus_test.py
+
+
+data = hw.getNode('regs').readBlock(20) # Legge da reg
+hw.dispatch() # send ipbus transaction
+data.value()
+data_to_write=range(20)
+data = hw.getNode('regs').writeBlock(data_to_write)
+hw.dispatch()
+data = hw.getNode('regs').readBlock(1024)
+hw.dispatch()
+data.value()
+
+reg e definito nel file dentro la cartella sofrware 
+
+filtro in project uno: il filtro si comporta come nel jupyter notebook che ha alice  
